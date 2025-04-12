@@ -12,7 +12,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'engine-off-warning'): void
+  (event: 'engine-off-warning'): void
+  (event: 'move', direction: 'up' | 'down' | 'left' | 'right'): void
 }>()
 
 function handleKeyDown(event: KeyboardEvent) {
@@ -23,15 +24,19 @@ function handleKeyDown(event: KeyboardEvent) {
 
   switch (event.key) {
     case 'ArrowUp':
+      emit('move', 'up')
       console.log('Move Forward')
       break
     case 'ArrowDown':
+      emit('move', 'down')
       console.log('Move Backward')
       break
     case 'ArrowLeft':
+      emit('move', 'left')
       console.log('Move Left')
       break
     case 'ArrowRight':
+      emit('move', 'right')
       console.log('Move Right')
       break
     default:
