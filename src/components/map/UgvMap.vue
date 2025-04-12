@@ -38,9 +38,10 @@ watch(
   (newPos) => {
     if (marker) {
       marker.setLatLng([newPos.y, newPos.x])
-      map.panTo([newPos.y, newPos.x])
+      map.flyTo([newPos.y, newPos.x], map.getZoom())
     }
   },
+  { deep: true },
 )
 </script>
 
