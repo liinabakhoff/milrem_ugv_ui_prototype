@@ -51,6 +51,7 @@ const iconColor = computed(() => (props.engineOn ? '#f44336' : '#4CAF50'))
   align-items: center;
   gap: 8px;
   transition: background-color 0.3s;
+  z-index: 999;
 }
 
 .engine-button:hover {
