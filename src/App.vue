@@ -1,12 +1,13 @@
-<template>
-  <h1>Milrem UGV UI Prototype</h1>
-</template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import EngineButton from './components/controls/EngineButton.vue'
 
-<script setup></script>
-
-<style scoped>
-h1 {
-  text-align: center;
-  margin-top: 2rem;
+const engineOn = ref(false)
+const toggleEngine = () => {
+  engineOn.value = !engineOn.value
 }
-</style>
+</script>
+
+<template>
+  <EngineButton :engineOn="engineOn" @toggleEngine="toggleEngine" />
+</template>
