@@ -19,7 +19,12 @@
     @rename="renameWaypoint"
     @delete="deleteWaypoint"
   />
-  <Notification :visible="notification.visible" :message="notification.message" />
+  <Notification
+    :visible="notification.visible"
+    :message="notification.message"
+    :type="notification.type"
+  />
+
   <RenameModal
     v-if="renameModal.visible"
     :currentName="renameModal.currentName"
@@ -108,19 +113,25 @@ function deleteWaypoint(id: number) {
 const notification = ref({
   visible: false,
   message: '',
+  type: 'info' as 'info' | 'warning' | 'success',
 })
 
-function showNotification(message: string) {
+function showNotification(message: string, type: 'info' | 'warning' | 'success' = 'info') {
+  if (notification.value.visible && notification.value.message === message) {
+    // Already visible with the same message, do nothing
+    return
+  }
   notification.value.message = message
+  notification.value.type = type
   notification.value.visible = true
 
   setTimeout(() => {
     notification.value.visible = false
-  }, 3000) // Hide after 3 seconds
+  }, 3000)
 }
 
 const showEngineOffWarning = () => {
-  showNotification('Engine is off. Please start the engine!')
+  showNotification('Engine is off. Please start the engine!', 'warning')
 }
 
 const renameModal = ref({

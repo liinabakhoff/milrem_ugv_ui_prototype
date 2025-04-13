@@ -33,13 +33,19 @@ const emit = defineEmits<{
   position: absolute;
   top: 20px;
   left: 20px;
-  background: rgba(255, 255, 255, 0.8);
   padding: 10px;
   border: 1px solid black;
-  border-radius: 5px;
   max-height: 300px;
   overflow-y: auto;
   z-index: 9999;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.waypoints-list h3 {
+  margin-bottom: 0.5rem;
 }
 
 .waypoints-list ul {

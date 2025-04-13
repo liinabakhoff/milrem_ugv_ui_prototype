@@ -25,11 +25,18 @@ function toMgrs(lat: number, lng: number): string {
 </script>
 
 <style scoped>
-li {
-  margin-bottom: 8px;
-}
-
 button {
   margin-left: 5px;
+}
+
+li {
+  margin-bottom: 8px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+li:hover {
+  background-color: #eef3fb;
 }
 </style>

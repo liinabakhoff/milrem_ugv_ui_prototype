@@ -8,7 +8,7 @@
         viewBox="0 0 24 24"
         fill="none"
         :stroke="iconColor"
-        stroke-width="2"
+        stroke-width="3"
         stroke-linecap="round"
         stroke-linejoin="round"
       >
@@ -44,8 +44,9 @@ const iconColor = computed(() => (props.engineOn ? '#f44336' : '#4CAF50'))
   border: 2px solid black;
   color: white;
   padding: 10px 20px;
-  font-weight: bold;
-  border-radius: 8px;
+  font-weight: 400;
+  font-size: 0.9rem;
+  border-radius: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;

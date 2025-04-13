@@ -2,7 +2,7 @@
   <div class="modal-overlay">
     <div class="modal">
       <h3>Rename Waypoint</h3>
-      <input ref="nameInput" v-model="newName" placeholder="Enter new name" />
+      <input ref="nameInput" v-model="newName" placeholder="Enter new name" spellcheck="false" />
       <div class="actions">
         <button @click="$emit('cancel')">Cancel</button>
         <button @click="$emit('confirm', newName)">Confirm</button>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, onBeforeUnmount, computed } from 'vue'
 
 const props = defineProps<{
   currentName: string
@@ -25,7 +25,7 @@ const emit = defineEmits<{
 
 const newName = ref(props.currentName)
 const nameInput = ref<HTMLInputElement | null>(null)
-
+const isDisabled = computed(() => newName.value.trim() === '')
 watch(
   () => props.currentName,
   (newVal) => {
@@ -33,11 +33,24 @@ watch(
   },
 )
 
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    emit('cancel')
+  } else if (event.key === 'Enter') {
+    emit('confirm', newName.value)
+  }
+}
+
 // Focus when the component is mounted
 onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
   nextTick(() => {
     nameInput.value?.focus()
   })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeydown)
 })
 </script>
 
@@ -56,11 +69,17 @@ onMounted(() => {
 }
 
 .modal {
-  background: white;
   padding: 20px;
-  border-radius: 8px;
   width: 300px;
   text-align: center;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal h3 {
+  margin-bottom: 1rem;
 }
 
 .actions {
