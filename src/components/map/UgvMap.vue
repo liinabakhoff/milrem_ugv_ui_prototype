@@ -51,6 +51,7 @@ onMounted(() => {
     center: [props.position.y, props.position.x],
     zoom: 20,
     keyboard: false,
+    zoomControl: false,
   })
   // Add tile layer (OpenStreetMap tiles)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

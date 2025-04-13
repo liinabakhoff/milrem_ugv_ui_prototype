@@ -8,12 +8,15 @@
   <UgvMap
     :position="position"
     :waypoints="waypoints"
-    @drive-to="driveToWaypoint"
+    @drive-to="driveToCoordinates"
     @save-waypoint="saveWaypoint"
   />
-  <ul>
-    <li v-for="wp in waypoints" :key="wp.id">{{ wp.name }}: ({{ wp.lat }}, {{ wp.lng }})</li>
-  </ul>
+  <WaypointsList
+    :waypoints="waypoints"
+    @drive="driveToWaypoint"
+    @rename="renameWaypoint"
+    @delete="deleteWaypoint"
+  />
 </template>
 
 <script setup lang="ts">
@@ -21,6 +24,7 @@ import { ref } from 'vue'
 import EngineButton from './components/controls/EngineButton.vue'
 import MovementControl from './components/controls/MovementControl.vue'
 import UgvMap from './components/map/UgvMap.vue'
+import WaypointsList from './components/waypoints/WaypointsList.vue'
 
 const engineOn = ref(false)
 const toggleEngine = () => {
@@ -59,8 +63,37 @@ const saveWaypoint = (coords: { lat: number; lng: number }) => {
   })
 }
 
-const driveToWaypoint = (coords: { lat: number; lng: number }) => {
+const driveToCoordinates = (coords: { lat: number; lng: number }) => {
+  if (!engineOn.value) {
+    showEngineOffWarning()
+    return
+  }
   position.value = { x: coords.lng, y: coords.lat }
+}
+
+function driveToWaypoint(id: number) {
+  if (!engineOn.value) {
+    showEngineOffWarning()
+    return
+  }
+  const waypoint = waypoints.value.find((wp) => wp.id === id)
+  if (waypoint) {
+    position.value = { x: waypoint.lng, y: waypoint.lat }
+  }
+}
+
+function renameWaypoint(id: number) {
+  const newName = prompt('Enter new name for the waypoint:')
+  if (!newName) return
+
+  const waypoint = waypoints.value.find((wp) => wp.id === id)
+  if (waypoint) {
+    waypoint.name = newName
+  }
+}
+
+function deleteWaypoint(id: number) {
+  waypoints.value = waypoints.value.filter((wp) => wp.id !== id)
 }
 
 const showEngineOffWarning = () => {
