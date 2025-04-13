@@ -3,6 +3,13 @@ import { onMounted, ref, watch } from 'vue'
 import L from 'leaflet'
 import ActionPopup from '../ui/ActionPopup.vue'
 
+const waypointIcon = L.icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+  iconSize: [20, 20],
+  iconAnchor: [10, 20],
+  popupAnchor: [0, -20],
+})
+
 const savedMarkers: L.Marker[] = []
 
 const props = defineProps<{
@@ -95,17 +102,25 @@ function clearTempWaypoint() {
 watch(
   () => props.waypoints,
   (newWaypoints) => {
-    // Remove old markers
+    console.log('Waypoints changed inside onMounted:', newWaypoints)
+
+    if (!map) {
+      console.warn('Map is not initialized yet.')
+      return
+    }
+
     savedMarkers.forEach((marker) => map.removeLayer(marker))
     savedMarkers.length = 0
 
-    // Add new markers
     newWaypoints.forEach((wp) => {
-      const marker = L.marker([wp.lat, wp.lng]).addTo(map).bindPopup(wp.name)
+      const marker = L.marker([wp.lat, wp.lng], { icon: waypointIcon })
+        .addTo(map)
+        .bindPopup(wp.name)
+
       savedMarkers.push(marker)
     })
   },
-  { immediate: true },
+  { immediate: true, deep: true }, // ✅ ADD deep: true!
 )
 
 function handleDrive() {

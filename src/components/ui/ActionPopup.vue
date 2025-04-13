@@ -1,8 +1,8 @@
 <template>
   <div class="popup">
-    <button @click="$emit('drive')">Drive</button>
-    <button @click="$emit('save')">Save</button>
-    <button @click="$emit('discard')">Discard</button>
+    <button @click="emit('drive')">Drive</button>
+    <button @click="emit('save')">Save</button>
+    <button @click="emit('discard')">Discard</button>
   </div>
 </template>
 
