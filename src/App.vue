@@ -17,6 +17,7 @@
     @rename="renameWaypoint"
     @delete="deleteWaypoint"
   />
+  <Notification :visible="notification.visible" :message="notification.message" />
 </template>
 
 <script setup lang="ts">
@@ -25,6 +26,7 @@ import EngineButton from './components/controls/EngineButton.vue'
 import MovementControl from './components/controls/MovementControl.vue'
 import UgvMap from './components/map/UgvMap.vue'
 import WaypointsList from './components/waypoints/WaypointsList.vue'
+import Notification from './components/ui/Notification.vue'
 
 const engineOn = ref(false)
 const toggleEngine = () => {
@@ -96,7 +98,21 @@ function deleteWaypoint(id: number) {
   waypoints.value = waypoints.value.filter((wp) => wp.id !== id)
 }
 
+const notification = ref({
+  visible: false,
+  message: '',
+})
+
+function showNotification(message: string) {
+  notification.value.message = message
+  notification.value.visible = true
+
+  setTimeout(() => {
+    notification.value.visible = false
+  }, 3000) // Hide after 3 seconds
+}
+
 const showEngineOffWarning = () => {
-  alert('Engine is off. Please start the engine!')
+  showNotification('Engine is off. Please start the engine!')
 }
 </script>
