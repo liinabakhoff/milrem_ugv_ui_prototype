@@ -12,12 +12,19 @@
     @save-waypoint="saveWaypoint"
   />
   <WaypointsList
+    v-if="waypoints.length > 0"
     :waypoints="waypoints"
     @drive="driveToWaypoint"
     @rename="renameWaypoint"
     @delete="deleteWaypoint"
   />
   <Notification :visible="notification.visible" :message="notification.message" />
+  <RenameModal
+    v-if="renameModal.visible"
+    :currentName="renameModal.currentName"
+    @cancel="closeRenameModal"
+    @confirm="confirmRename"
+  />
 </template>
 
 <script setup lang="ts">
@@ -27,6 +34,7 @@ import MovementControl from './components/controls/MovementControl.vue'
 import UgvMap from './components/map/UgvMap.vue'
 import WaypointsList from './components/waypoints/WaypointsList.vue'
 import Notification from './components/ui/Notification.vue'
+import RenameModal from './components/ui/RenameModal.vue'
 
 const engineOn = ref(false)
 const toggleEngine = () => {
@@ -85,13 +93,7 @@ function driveToWaypoint(id: number) {
 }
 
 function renameWaypoint(id: number) {
-  const newName = prompt('Enter new name for the waypoint:')
-  if (!newName) return
-
-  const waypoint = waypoints.value.find((wp) => wp.id === id)
-  if (waypoint) {
-    waypoint.name = newName
-  }
+  openRenameModal(id)
 }
 
 function deleteWaypoint(id: number) {
@@ -114,5 +116,36 @@ function showNotification(message: string) {
 
 const showEngineOffWarning = () => {
   showNotification('Engine is off. Please start the engine!')
+}
+
+const renameModal = ref({
+  visible: false,
+  waypointId: null as number | null,
+  currentName: '',
+})
+
+function openRenameModal(id: number) {
+  const waypoint = waypoints.value.find((wp) => wp.id === id)
+  if (waypoint) {
+    renameModal.value = {
+      visible: true,
+      waypointId: waypoint.id,
+      currentName: waypoint.name,
+    }
+  }
+}
+
+function closeRenameModal() {
+  renameModal.value.visible = false
+}
+
+function confirmRename(newName: string) {
+  if (renameModal.value.waypointId !== null) {
+    const waypoint = waypoints.value.find((wp) => wp.id === renameModal.value.waypointId)
+    if (waypoint && newName.trim()) {
+      waypoint.name = newName.trim()
+    }
+  }
+  closeRenameModal()
 }
 </script>

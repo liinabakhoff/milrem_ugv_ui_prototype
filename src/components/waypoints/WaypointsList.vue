@@ -33,7 +33,7 @@ const emit = defineEmits<{
   position: absolute;
   top: 20px;
   left: 20px;
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
