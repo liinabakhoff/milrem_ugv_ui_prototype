@@ -47,7 +47,7 @@ A demonstration video showcasing all features of the application is included in 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/milrem_ugv_ui_prototype.git
+   git clone https://github.com/liinabakhoff/milrem_ugv_ui_prototype
    cd milrem_ugv_ui_prototype
 
    ```
