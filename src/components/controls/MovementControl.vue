@@ -9,6 +9,7 @@ import { onMounted, onUnmounted, defineProps, defineEmits } from 'vue'
 
 const props = defineProps<{
   engineOn: boolean
+  renameModalOpen: boolean
 }>()
 
 const emit = defineEmits<{
@@ -22,6 +23,8 @@ function handleKeyDown(event: KeyboardEvent) {
   if (!movementKeys.includes(event.key)) {
     return // Ignore non-movement keys
   }
+
+  if (props.renameModalOpen) return
 
   if (!props.engineOn) {
     emit('engine-off-warning')

@@ -2,6 +2,7 @@
   <EngineButton :engine-on="engineOn" @toggle-engine="toggleEngine" />
   <MovementControl
     :engine-on="engineOn"
+    :rename-modal-open="renameModal.visible"
     @engine-off-warning="showEngineOffWarning"
     @move="moveUGV"
   />
@@ -44,7 +45,11 @@ const toggleEngine = () => {
 const position = ref({ x: 24.8485589, y: 59.4296598 })
 
 const moveUGV = (direction: 'up' | 'down' | 'left' | 'right') => {
+  // Prevent UGV movement when rename modal is open
+  if (renameModal.value.visible) return
+
   if (!engineOn.value) return
+
   const step = 0.00001
   switch (direction) {
     case 'up':
