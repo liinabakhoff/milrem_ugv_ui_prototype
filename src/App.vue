@@ -5,7 +5,15 @@
     @engine-off-warning="showEngineOffWarning"
     @move="moveUGV"
   />
-  <UgvMap :position="position" />
+  <UgvMap
+    :position="position"
+    :waypoints="waypoints"
+    @drive-to="driveToWaypoint"
+    @save-waypoint="saveWaypoint"
+  />
+  <ul>
+    <li v-for="wp in waypoints" :key="wp.id">{{ wp.name }}: ({{ wp.lat }}, {{ wp.lng }})</li>
+  </ul>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +46,21 @@ const moveUGV = (direction: 'up' | 'down' | 'left' | 'right') => {
       position.value.x += step
       break
   }
+}
+
+const waypoints = ref<{ id: number; name: string; lat: number; lng: number }[]>([])
+
+const saveWaypoint = (coords: { lat: number; lng: number }) => {
+  waypoints.value.push({
+    id: Date.now(), // Simple unique ID
+    name: `Waypoint ${waypoints.value.length + 1}`,
+    lat: coords.lat,
+    lng: coords.lng,
+  })
+}
+
+const driveToWaypoint = (coords: { lat: number; lng: number }) => {
+  position.value = { x: coords.lng, y: coords.lat }
 }
 
 const showEngineOffWarning = () => {

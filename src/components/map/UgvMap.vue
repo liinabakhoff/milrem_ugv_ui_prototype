@@ -1,18 +1,47 @@
-<template>
-  <div ref="mapContainer" class="map-container"></div>
-</template>
-
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import L from 'leaflet'
+import ActionPopup from '../ui/ActionPopup.vue'
+
+const savedMarkers: L.Marker[] = []
 
 const props = defineProps<{
   position: { x: number; y: number }
+  waypoints: { id: number; name: string; lat: number; lng: number }[]
 }>()
 
 const mapContainer = ref<HTMLDivElement | null>(null)
 let map: L.Map
 let marker: L.Marker
+
+let longPressTimer: ReturnType<typeof setTimeout> | null = null
+
+function onMapMouseDown(e: L.LeafletMouseEvent) {
+  const { lat, lng } = e.latlng
+  const containerPoint = map.latLngToContainerPoint(e.latlng)
+
+  longPressTimer = setTimeout(() => {
+    tempWaypoint.value = { lat, lng }
+    popupPosition.value = { x: containerPoint.x, y: containerPoint.y }
+
+    if (tempMarker) {
+      map.removeLayer(tempMarker)
+    }
+
+    tempMarker = L.marker([lat, lng]).addTo(map)
+  }, 600)
+}
+
+function onMapMouseUp() {
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+    longPressTimer = null
+  }
+}
+const popupPosition = ref<{ x: number; y: number } | null>(null)
+
+const tempWaypoint = ref<{ lat: number; lng: number } | null>(null)
+let tempMarker: L.Marker | null = null
 
 onMounted(() => {
   if (!mapContainer.value) return
@@ -30,6 +59,10 @@ onMounted(() => {
 
   // Add initial marker
   marker = L.marker([props.position.y, props.position.x]).addTo(map)
+
+  map.on('mousedown', onMapMouseDown)
+  map.on('mouseup', onMapMouseUp)
+  map.on('mouseout', onMapMouseUp)
 })
 
 // Watch for position changes
@@ -43,6 +76,54 @@ watch(
   },
   { deep: true },
 )
+
+const emit = defineEmits<{
+  (e: 'drive-to', coords: { lat: number; lng: number }): void
+  (e: 'save-waypoint', coords: { lat: number; lng: number }): void
+}>()
+
+function clearTempWaypoint() {
+  tempWaypoint.value = null
+  popupPosition.value = null
+  if (tempMarker) {
+    map.removeLayer(tempMarker)
+    tempMarker = null
+  }
+}
+
+watch(
+  () => props.waypoints,
+  (newWaypoints) => {
+    // Remove old markers
+    savedMarkers.forEach((marker) => map.removeLayer(marker))
+    savedMarkers.length = 0
+
+    // Add new markers
+    newWaypoints.forEach((wp) => {
+      const marker = L.marker([wp.lat, wp.lng]).addTo(map).bindPopup(wp.name)
+      savedMarkers.push(marker)
+    })
+  },
+  { immediate: true },
+)
+
+function handleDrive() {
+  if (tempWaypoint.value) {
+    emit('drive-to', tempWaypoint.value)
+    clearTempWaypoint()
+  }
+}
+
+function handleSave() {
+  if (tempWaypoint.value) {
+    emit('save-waypoint', tempWaypoint.value)
+    clearTempWaypoint()
+  }
+}
+
+function handleDiscard() {
+  clearTempWaypoint()
+}
 </script>
 
 <style scoped>
@@ -51,3 +132,19 @@ watch(
   width: 100%;
 }
 </style>
+
+<template>
+  <div ref="mapContainer" class="map-container"></div>
+  <ActionPopup
+    v-if="tempWaypoint && popupPosition"
+    :style="{
+      position: 'absolute',
+      left: popupPosition.x + 'px',
+      top: popupPosition.y + 'px',
+      zIndex: 9999,
+    }"
+    @drive="handleDrive"
+    @save="handleSave"
+    @discard="handleDiscard"
+  />
+</template>
