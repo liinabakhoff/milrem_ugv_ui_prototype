@@ -2,7 +2,7 @@
   <div class="modal-overlay">
     <div class="modal">
       <h3>Rename Waypoint</h3>
-      <input v-model="newName" placeholder="Enter new name" />
+      <input ref="nameInput" v-model="newName" placeholder="Enter new name" />
       <div class="actions">
         <button @click="$emit('cancel')">Cancel</button>
         <button @click="$emit('confirm', newName)">Confirm</button>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 
 const props = defineProps<{
   currentName: string
@@ -24,6 +24,7 @@ const emit = defineEmits<{
 }>()
 
 const newName = ref(props.currentName)
+const nameInput = ref<HTMLInputElement | null>(null)
 
 watch(
   () => props.currentName,
@@ -31,6 +32,13 @@ watch(
     newName.value = newVal
   },
 )
+
+// Focus when the component is mounted
+onMounted(() => {
+  nextTick(() => {
+    nameInput.value?.focus()
+  })
+})
 </script>
 
 <style scoped>
