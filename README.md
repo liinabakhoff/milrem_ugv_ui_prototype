@@ -118,9 +118,9 @@ src/
 
 The most challenging part of the assignment was learning Vue.js in a very short timeframe. Although I have previous experience with React, and the overall concept of component-based frontend frameworks is familiar to me, Vue’s specific syntax and ecosystem were new.
 
-To address this, I dedicated time to study and practice intensively. I took a Vue 3 course on Udemy by Maximilian Schwarzmüller, which helped me understand core concepts such as the Composition API, reactivity system, event handling, and component communication.
+To quickly get up to speed, I dedicated focused time to learning and practice. I followed a Vue 3 course on Udemy by Maximilian Schwarzmüller, which helped me grasp the fundamentals like the Composition API, Vue's reactivity system, event handling, and component communication.
 
-Applying this knowledge directly to the assignment allowed me to accelerate my learning curve while building the project simultaneously.
+Being able to apply what I was learning directly to this project helped me solidify my understanding much faster and made the learning process both practical and rewarding.
 
 ### Use of AI Systems
 
