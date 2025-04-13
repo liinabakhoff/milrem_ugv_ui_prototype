@@ -102,10 +102,7 @@ function clearTempWaypoint() {
 watch(
   () => props.waypoints,
   (newWaypoints) => {
-    console.log('Waypoints changed inside onMounted:', newWaypoints)
-
     if (!map) {
-      console.warn('Map is not initialized yet.')
       return
     }
 
