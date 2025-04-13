@@ -2,17 +2,21 @@
   <div class="waypoints-list">
     <h3>Saved Waypoints</h3>
     <ul>
-      <li v-for="wp in waypoints" :key="wp.id">
-        {{ wp.name }} ({{ wp.lat.toFixed(4) }}, {{ wp.lng.toFixed(4) }})
-        <button @click="$emit('drive', wp.id)">Drive</button>
-        <button @click="$emit('rename', wp.id)">Rename</button>
-        <button @click="$emit('delete', wp.id)">Delete</button>
-      </li>
+      <WaypointItem
+        v-for="wp in waypoints"
+        :key="wp.id"
+        :waypoint="wp"
+        @drive="$emit('drive', wp.id)"
+        @rename="$emit('rename', wp.id)"
+        @delete="$emit('delete', wp.id)"
+      />
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
+import WaypointItem from './WaypointItem.vue'
+
 const props = defineProps<{
   waypoints: { id: number; name: string; lat: number; lng: number }[]
 }>()
@@ -42,13 +46,5 @@ const emit = defineEmits<{
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.waypoints-list li {
-  margin-bottom: 8px;
-}
-
-.waypoints-list button {
-  margin-left: 5px;
 }
 </style>

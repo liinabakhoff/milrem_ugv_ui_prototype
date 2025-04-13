@@ -120,7 +120,7 @@ watch(
       savedMarkers.push(marker)
     })
   },
-  { immediate: true, deep: true }, // ✅ ADD deep: true!
+  { immediate: true, deep: true },
 )
 
 function handleDrive() {
