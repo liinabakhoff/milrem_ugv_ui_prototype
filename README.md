@@ -6,9 +6,9 @@ The application simulates engine control, manual navigation, and waypoint manage
 
 ## Demo Video
 
-A demonstration video showcasing all features of the application is included in the root directory of this repository. https://github.com/liinabakhoff/milrem_ugv_ui_prototype/MilremUGV_Demo_LiinaMaria.mov
+A demonstration video showcasing all features of the application is included in the root directory of this repository. 
 
-[![Demo recording](screenshot.png)](https://github.com/liinabakhoff/milrem_ugv_ui_prototype/MilremUGV_Demo_LiinaMaria.mov)
+[![Demo video](screenshot.png)](https://github.com/liinabakhoff/milrem_ugv_ui_prototype/blob/main/MilremUGV_Demo_LiinaMaria.mov)
 
 ## Features
 
