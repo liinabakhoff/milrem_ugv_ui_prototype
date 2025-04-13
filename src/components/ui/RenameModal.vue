@@ -36,7 +36,7 @@ watch(
 function handleKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') {
     emit('cancel')
-  } else if (event.key === 'Enter') {
+  } else if (event.key === 'Enter' && !isDisabled.value) {
     emit('confirm', newName.value)
   }
 }

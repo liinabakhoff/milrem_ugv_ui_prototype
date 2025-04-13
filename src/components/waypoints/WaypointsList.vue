@@ -53,4 +53,10 @@ const emit = defineEmits<{
   padding: 0;
   margin: 0;
 }
+
+li + li {
+  border-top: 1px solid #eee;
+  padding-top: 4px;
+  margin-top: 4px;
+}
 </style>

@@ -50,7 +50,7 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown)
+  window.addEventListener('keydown', handleKeyDown, { passive: true })
 })
 
 onUnmounted(() => {

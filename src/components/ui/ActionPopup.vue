@@ -30,4 +30,8 @@ button {
   padding: 5px;
   width: 100%;
 }
+
+button:hover {
+  background-color: #eef3fb;
+}
 </style>
